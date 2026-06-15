@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mateo — Trip Planner PRD v0.1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* Lagoon */
+  --lagoon-900:#14394A; --lagoon-800:#1C5068; --lagoon-700:#236A88; --lagoon-600:#2A7FA5;
+  --lagoon-500:#3D93B8; --lagoon-400:#5EA9C8; --lagoon-300:#88C1D8; --lagoon-200:#B5D9E8;
+  --lagoon-100:#DFF0F6; --lagoon-50:#EFF8FB;
+  /* Palm */
+  --palm-900:#1E3D2A; --palm-700:#3A7A54; --palm-600:#4E9A6A; --palm-100:#E2F3E9; --palm-50:#F0F9F3;
+  /* Driftwood */
+  --drift-900:#4A3920; --drift-700:#917143; --drift-600:#B8915A; --drift-100:#F5EFE3; --drift-50:#FAF7F2;
+  /* Neutrals */
+  --neutral-950:#0F1A1C; --neutral-900:#1C2B2E; --neutral-800:#2E4347; --neutral-700:#435A5E;
+  --neutral-600:#5A7175; --neutral-500:#72898D; --neutral-400:#8FA3A6; --neutral-300:#ADBCBE;
+  --neutral-200:#CDD7D9; --neutral-100:#E8EDED; --neutral-50:#F4F7F7;
+  /* Semantic */
+  --success:#3BA55D; --success-light:#E8F5ED; --warning:#E5A837; --warning-light:#FDF4E0;
+  --error:#D94444; --error-light:#FDECEC; --info:#2A7FA5; --info-light:#DFF0F6;
+  /* Map markers */
+  --marker-viewpoint:#2A7FA5; --marker-beach:#D4961F; --marker-hike:#3A7A54; --marker-restaurant:#D94444;
+  --marker-museum:#7E57C2; --marker-cultural:#C2694B; --marker-bar:#A83E6C; --marker-cafe:#8D6E4C;
+  --marker-activity:#E06830; --marker-stay:#1C5068;
+  /* Spacing */
+  --space-2:8px; --space-3:12px; --space-4:16px; --space-6:24px; --space-8:32px; --space-12:48px; --space-16:64px;
+  /* Radii */
+  --radius-sm:6px; --radius-md:10px; --radius-lg:14px; --radius-xl:20px; --radius-full:9999px;
+  /* Shadows */
+  --shadow-sm:0 1px 3px rgba(15,26,28,0.08); --shadow-md:0 4px 12px rgba(15,26,28,0.10);
+  --shadow-lg:0 8px 28px rgba(15,26,28,0.12); --shadow-xl:0 16px 48px rgba(15,26,28,0.16);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family:'Nunito',-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:15px; line-height:1.7; color:var(--neutral-900);
+  background:var(--neutral-50); -webkit-font-smoothing:antialiased;
+}
+
+.wrap { max-width: 1040px; margin: 0 auto; background: #fff; box-shadow: var(--shadow-lg); }
+
+/* ── Hero ── */
+.hero {
+  background: var(--lagoon-600); color:#fff; padding: 72px 60px 64px;
+  position: relative; overflow: hidden;
+}
+.hero::before { content:''; position:absolute; top:-110px; right:-70px; width:380px; height:380px;
+  border-radius:50%; background:rgba(255,255,255,0.05); }
+.hero::after { content:''; position:absolute; bottom:-70px; left:90px; width:220px; height:220px;
+  border-radius:50%; background:rgba(78,154,106,0.18); }
+.hero-eyebrow { font-size:11px; letter-spacing:0.18em; text-transform:uppercase;
+  color:rgba(255,255,255,0.65); margin-bottom:14px; position:relative; z-index:1; }
+.hero-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,6vw,4.6rem);
+  letter-spacing:0.04em; line-height:0.98; margin-bottom:16px; position:relative; z-index:1; }
+.hero-sub { font-size:16px; color:rgba(255,255,255,0.8); max-width:560px; line-height:1.7;
+  position:relative; z-index:1; }
+.hero-meta { margin-top:30px; display:flex; flex-wrap:wrap; gap:28px; font-size:12px;
+  color:rgba(255,255,255,0.55); position:relative; z-index:1; }
+.hero-meta b { color:#fff; font-weight:700; display:block; font-size:13px; }
+
+/* ── Sections ── */
+.section { padding:56px 60px; border-bottom:1px solid var(--neutral-100); }
+.section--warm { background:var(--drift-50); }
+.section--cool { background:var(--lagoon-50); }
+.section-label { font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--lagoon-600); margin-bottom:10px; }
+.section-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(1.7rem,3vw,2.4rem);
+  letter-spacing:0.03em; line-height:1.05; color:var(--neutral-900); margin-bottom:12px; }
+.section-desc { font-size:15px; color:var(--neutral-600); max-width:640px; margin-bottom:32px; }
+
+h3.sub { font-size:16px; font-weight:800; color:var(--neutral-800); margin:28px 0 8px; }
+h3.sub:first-of-type { margin-top:0; }
+p { margin-bottom:14px; }
+p:last-child { margin-bottom:0; }
+.section ul { margin:0 0 14px; padding-left:20px; }
+.section li { margin-bottom:7px; }
+strong { font-weight:700; color:var(--neutral-800); }
+
+/* ── Eyebrow numbering as real sequence markers ── */
+.section-num { color:var(--neutral-300); }
+
+/* ── Grids ── */
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+
+/* ── Principle / feature cards ── */
+.principle { background:#fff; border-radius:var(--radius-md); padding:20px 22px;
+  border-left:3px solid var(--lagoon-600); box-shadow:var(--shadow-sm); }
+.principle-title { font-family:'Bebas Neue',sans-serif; font-size:18px; letter-spacing:0.05em;
+  color:var(--neutral-900); margin-bottom:6px; }
+.principle p { font-size:13.5px; color:var(--neutral-600); margin:0; line-height:1.6; }
+
+/* ── Feature blocks ── */
+.feature { background:#fff; border:1px solid var(--neutral-100); border-radius:var(--radius-lg);
+  padding:26px 28px; box-shadow:var(--shadow-sm); margin-bottom:20px; }
+.feature-head { display:flex; align-items:center; gap:12px; margin-bottom:6px; }
+.feature-pin { width:30px; height:36px; border-radius:50% 50% 50% 0; transform:rotate(-45deg);
+  flex-shrink:0; display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-sm); }
+.feature-pin svg { transform:rotate(45deg); }
+.feature-title { font-family:'Bebas Neue',sans-serif; font-size:21px; letter-spacing:0.04em;
+  color:var(--neutral-900); }
+.feature-tag { margin-left:auto; }
+.feature ul { margin-top:10px; }
+
+/* ── Tags / badges ── */
+.tag { display:inline-block; font-size:11px; font-weight:700; letter-spacing:0.04em;
+  padding:4px 12px; border-radius:var(--radius-full); white-space:nowrap; }
+.tag--lagoon{background:var(--lagoon-100);color:var(--lagoon-700);}
+.tag--palm{background:var(--palm-100);color:var(--palm-700);}
+.tag--drift{background:var(--drift-100);color:var(--drift-700);}
+.tag--neutral{background:var(--neutral-100);color:var(--neutral-700);}
+.tag--success{background:var(--success-light);color:#1E6B35;}
+
+/* ── Callouts ── */
+.note { background:var(--info-light); border-left:3px solid var(--info);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:14px 18px; font-size:13px;
+  color:var(--lagoon-800); margin:16px 0; }
+.warn { background:var(--warning-light); border-left:3px solid var(--warning);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:14px 18px; font-size:13px;
+  color:var(--drift-900); margin:16px 0; }
+
+/* ── Tables ── */
+table { width:100%; border-collapse:collapse; font-size:13.5px; margin:6px 0 4px;
+  background:#fff; border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-sm); }
+th { background:var(--neutral-900); color:#fff; text-align:left; font-weight:700; font-size:12px;
+  letter-spacing:0.04em; padding:11px 14px; }
+td { padding:10px 14px; border-bottom:1px solid var(--neutral-100); color:var(--neutral-700); }
+tr:last-child td { border-bottom:none; }
+.dot { display:inline-block; width:13px; height:13px; border-radius:50%; vertical-align:middle;
+  margin-right:8px; box-shadow:0 1px 3px rgba(0,0,0,.15); }
+code { font-family:'SF Mono','Fira Code',Consolas,monospace; font-size:12px; background:var(--neutral-100);
+  border-radius:var(--radius-sm); padding:1px 6px; color:var(--lagoon-700); }
+
+/* ── Done-state demo ── */
+.done-demo { display:flex; align-items:center; gap:14px; background:#fff; border:1px solid var(--neutral-100);
+  border-radius:var(--radius-md); padding:14px 16px; box-shadow:var(--shadow-sm); max-width:420px; }
+.done-check { width:26px; height:26px; border-radius:50%; background:var(--success); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; }
+.done-text b { font-family:'Bebas Neue',sans-serif; letter-spacing:0.04em; font-size:16px; color:var(--neutral-900); }
+.done-text span { display:block; font-size:12px; color:var(--neutral-500); }
+
+/* ── Flow steps ── */
+.flow { counter-reset:step; list-style:none; padding:0; }
+.flow li { position:relative; padding-left:42px; margin-bottom:14px; }
+.flow li::before { counter-increment:step; content:counter(step); position:absolute; left:0; top:-2px;
+  width:28px; height:28px; border-radius:var(--radius-full); background:var(--lagoon-600); color:#fff;
+  font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:0.04em;
+  display:flex; align-items:center; justify-content:center; }
+
+/* ── Footer ── */
+.foot { background:var(--neutral-950); padding:38px 60px; text-align:center; }
+.foot-word { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:0.06em;
+  color:var(--neutral-300); margin-bottom:6px; }
+.foot p { color:var(--neutral-500); font-size:12px; margin:0; }
+
+a { color:var(--lagoon-600); }
+:focus-visible { outline:3px solid var(--lagoon-300); outline-offset:2px; border-radius:3px; }
+
+@media (max-width:780px){
+  .hero,.section,.foot{ padding-left:24px; padding-right:24px; }
+  .grid-3,.grid-2{ grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-eyebrow">Mateo Travel App · Product Requirements</div>
+    <h1 class="hero-title">PLAN TOGETHER,<br>GO TOGETHER</h1>
+    <p class="hero-sub">A collaborative space where friends research places worth the trip, gather them in one shared map, and keep track of what's settled — powered by real Google Maps data, never stock-photo optimism.</p>
+    <div class="hero-meta">
+      <div><b>Draft v0.1</b>Status</div>
+      <div><b>Web (responsive)</b>Platform</div>
+      <div><b>TBD</b>Owner</div>
+      <div><b>June 14, 2026</b>Last updated</div>
+    </div>
+  </header>
+
+  <!-- 01 OVERVIEW -->
+  <section class="section">
+    <div class="section-label"><span class="section-num">01</span> — Foundation</div>
+    <h2 class="section-title">OVERVIEW</h2>
+    <p class="section-desc">Planning a trip with other people usually means scattering links and screenshots across a group chat. There's no shared view of everywhere you're considering, and no easy way to mark what's decided. Mateo gives a small group one living workspace: search real places, save them to a trip, leave notes, and check things off — all visible to everyone along for the ride.</p>
+    <p style="font-size:13.5px;color:var(--neutral-500);margin-bottom:24px;">This product carries the Mateo personality through every screen:</p>
+    <div class="grid-3">
+      <div class="principle" style="border-color:var(--lagoon-600);">
+        <div class="principle-title">ADVENTUROUS</div>
+        <p>Reduce the friction between "that looks great" and "it's on our list." Saving a place takes one tap from the moment of inspiration.</p>
+      </div>
+      <div class="principle" style="border-color:var(--palm-600);">
+        <div class="principle-title">GROUNDED</div>
+        <p>Every spot is a real place with real Google Maps data — ratings, hours, photos. No invented destinations, no hype.</p>
+      </div>
+      <div class="principle" style="border-color:var(--drift-600);">
+        <div class="principle-title">APPROACHABLE</div>
+        <p>Clean list and map views that a first-time traveler and a seasoned one read the same way. Never overwhelming.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 GOALS -->
+  <section class="section section--warm">
+    <div class="section-label"><span class="section-num">02</span> — Direction</div>
+    <h2 class="section-title">GOALS &amp; NON-GOALS</h2>
+    <div class="grid-2">
+      <div>
+        <h3 class="sub">Goals</h3>
+        <ul>
+          <li>Let people research genuine places using authoritative Google Maps data.</li>
+          <li>Give a group one shared, always-current view of every saved place per trip.</li>
+          <li>Make collaboration low-friction — invite by text or email, contribute without ceremony.</li>
+          <li>Track progress with a lightweight "done" state everyone can see.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="sub">Non-goals (this release)</h3>
+        <ul>
+          <li>Booking, payments, or reservations.</li>
+          <li>Day-by-day scheduling with times.</li>
+          <li>Native iOS / Android apps — responsive web only.</li>
+          <li>Offline mode.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note">Scope guardrail: Mateo is a travel companion, not a booking engine. When a feature drifts toward transactions or itineraries-with-times, it belongs in "later," not v1.</div>
+  </section>
+
+  <!-- 03 USERS + IA -->
+  <section class="section">
+    <div class="section-label"><span class="section-num">03</span> — Context</div>
+    <h2 class="section-title">WHO IT'S FOR &amp; HOW IT'S ORGANIZED</h2>
+    <h3 class="sub">Audience</h3>
+    <p>Small groups of 2–8 — friends, couples, families — planning a leisure trip together. Light technical comfort assumed: people who are happy searching and tapping, not power users.</p>
+    <h3 class="sub">Information architecture</h3>
+    <p>Two primary tabs carry the whole experience. On web these sit in the top navigation bar; the same two map to a bottom tab bar whenever Mateo goes mobile.</p>
+    <div class="grid-2">
+      <div class="principle" style="border-color:var(--lagoon-600);">
+        <div class="principle-title">PLAN</div>
+        <p>Research and discovery. Search for a spot, inspect its details, add it to a trip.</p>
+      </div>
+      <div class="principle" style="border-color:var(--palm-600);">
+        <div class="principle-title">TRIP</div>
+        <p>Create or open a trip, invite people, and browse everything saved — in list or map view.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 PLAN TAB -->
+  <section class="section section--cool">
+    <div class="section-label"><span class="section-num">04</span> — Feature</div>
+    <h2 class="section-title">THE PLAN TAB</h2>
+    <p class="section-desc">Where inspiration becomes a saved place. Search returns real Google Maps results; a detail modal shows enough to decide; one action drops it into a trip.</p>
+
+    <div class="feature">
+      <div class="feature-head">
+        <span class="feature-pin" style="background:var(--lagoon-600);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+        <span class="feature-title">Search</span>
+        <span class="feature-tag tag tag--lagoon">Google Maps · Places</span>
+      </div>
+      <ul>
+        <li>A single search field finds a spot by name or keyword.</li>
+        <li>Results come from the Google Maps Places API and show enough to identify the right one — name, category, photo thumbnail, area.</li>
+        <li>The normal Google search filters and type-ahead apply alongside free-text search, so the Plan experience mirrors Google Maps' own search and filtering.</li>
+      </ul>
+    </div>
+
+    <div class="feature">
+      <div class="feature-head">
+        <span class="feature-pin" style="background:var(--lagoon-600);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></span>
+        <span class="feature-title">Spot detail modal</span>
+      </div>
+      <p style="font-size:13.5px;color:var(--neutral-600);margin-top:6px;">Selecting a result opens a pop-up modal — a centered dialog on web, a bottom sheet on mobile, per the platform notes. It populates with Google Maps location data:</p>
+      <ul>
+        <li>Name, address, category, rating &amp; review count, price level, photos, hours, phone, website, and a map preview — subject to what the API returns for that place.</li>
+        <li>A clear <strong>Add to trip</strong> action anchored in the modal.</li>
+      </ul>
+      <div class="note">Cache place details the first time they're fetched, so reopening the same spot doesn't spend another Places call.</div>
+    </div>
+
+    <div class="feature">
+      <div class="feature-head">
+        <span class="feature-pin" style="background:var(--palm-600);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        <span class="feature-title">Add to a trip</span>
+      </div>
+      <ul>
+        <li>From the modal, pick which trip to add the spot to — or create a new trip inline without leaving the flow.</li>
+        <li><strong>Choose a category (required).</strong> Because Google place types don't map cleanly to Mateo's ten categories, adding a spot includes a required step where the user picks the Mateo category (Stay, Restaurant, Activity, Cafe, Bar, Viewpoint, Beach, Hike, Museum, Cultural site). That choice drives the spot's marker on the trip map.</li>
+        <li>A confirmation makes the result obvious; the spot now appears in that trip for every member.</li>
+        <li>The same place can't be added to a trip twice. If it's already there, the add is blocked and the user is told what happened and why ("Time Out Market is already on this trip").</li>
+      </ul>
+      <p style="font-size:13px;color:var(--neutral-500);margin:8px 0 0;">Copy follows the Mateo voice — specific about what happens: <code>Add to trip</code> → toast reads <code>Added to "Lisbon spring"</code>.</p>
+    </div>
+
+    <div class="note"><strong>Two maps, two behaviors.</strong> The <strong>Plan</strong> tab map is a 1:1 representation of Google Maps — standard Google markers for everything in view, so research feels like the map people already know. The <strong>Trip</strong> tab maps are curated: they show <em>only</em> the spots added to that trip, drawn with the Mateo category marker the user chose at add time. See §07.</div>
+  </section>
+
+  <!-- 05 TRIP TAB -->
+  <section class="section">
+    <div class="section-label"><span class="section-num">05</span> — Feature</div>
+    <h2 class="section-title">THE TRIP TAB</h2>
+    <p class="section-desc">Where trips are born and people are gathered. The tab lists the trips you're part of and lets you start a new one or open an existing one.</p>
+
+    <div class="feature">
+      <div class="feature-head">
+        <span class="feature-pin" style="background:var(--lagoon-600);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>
+        <span class="feature-title">Trips list &amp; creation</span>
+      </div>
+      <ul>
+        <li>Shows every trip the current user belongs to, presented as cards (photo → title → subtitle, per the card pattern).</li>
+        <li>A <strong>New trip</strong> action creates one with, at minimum, a name. Selecting any trip opens its detail view.</li>
+        <li>Empty state invites action in the Mateo voice: <em>"No trips yet. Start exploring?"</em></li>
+      </ul>
+    </div>
+
+    <div class="feature">
+      <div class="feature-head">
+        <span class="feature-pin" style="background:var(--drift-600);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></span>
+        <span class="feature-title">Invite members</span>
+      </div>
+      <ul>
+        <li>Inside a trip, <strong>any member or the creator</strong> can invite others by <strong>text (SMS)</strong> or <strong>email</strong>.</li>
+        <li>The invite delivers a link that opens the Mateo web app and prompts a log-in event.</li>
+        <li>The recipient then either <strong>logs in as an existing user</strong> or <strong>creates an account</strong> — an account is required before joining. Once authenticated, they become a member of the trip.</li>
+        <li>Invite links should be hard to guess and ideally revocable.</li>
+      </ul>
+      <div class="note">Resolved: account required to join; invite → web app → log-in prompt → sign in or sign up → join. Any member can invite, not just the creator.</div>
+    </div>
+
+    <div class="feature">
+      <div class="feature-head">
+        <span class="feature-pin" style="background:var(--lagoon-800);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+        <span class="feature-title">Roles &amp; permissions</span>
+      </div>
+      <p style="font-size:13.5px;color:var(--neutral-600);margin-top:6px;">Each trip has one <strong>trip leader</strong> (the creator, to start) and any number of members.</p>
+      <table style="margin-top:12px;">
+        <thead><tr><th>Action</th><th>Leader</th><th>Member</th></tr></thead>
+        <tbody>
+          <tr><td>Invite people</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Add spots, notes, mark done</td><td>✓</td><td>✓</td></tr>
+          <tr><td>Delete a spot</td><td>✓</td><td>—</td></tr>
+          <tr><td>Remove another member</td><td>✓</td><td>—</td></tr>
+          <tr><td>Delete the whole trip</td><td>✓</td><td>—</td></tr>
+          <tr><td>Leave the trip (remove self)</td><td>✓*</td><td>✓</td></tr>
+          <tr><td>Pass leadership to another member</td><td>✓</td><td>—</td></tr>
+        </tbody>
+      </table>
+      <p style="font-size:12px;color:var(--neutral-500);margin-top:8px;">Only the leader can delete spots, remove members, or delete the trip for everyone. Any member can remove themselves, and the leader can hand leadership to another member.</p>
+      <div class="note"><strong>Resolved — automatic succession by join order.</strong> If the leader leaves without handing off, leadership passes automatically to the member who joined the trip <strong>second</strong> (the earliest joiner after the original leader). If that person is no longer on the trip, it goes to the third, then the fourth, and so on down the join order until a current member is found. If no members remain, the trip is deleted.</div>
+    </div>
+  </section>
+
+  <!-- 06 TRIP DETAIL -->
+  <section class="section section--warm">
+    <div class="section-label"><span class="section-num">06</span> — Feature</div>
+    <h2 class="section-title">INSIDE A TRIP</h2>
+    <p class="section-desc">The shared heart of the product. A trip shows every spot added by any member — fully shared, no per-person filtering — and can be read as a list or a map.</p>
+
+    <div class="grid-2">
+      <div class="feature" style="margin-bottom:0;">
+        <div class="feature-head"><span class="feature-title">List view</span></div>
+        <p style="font-size:13.5px;color:var(--neutral-600);margin:6px 0 0;">Each spot is a row with its key info, category, and done indicator. Quick to scan top to bottom.</p>
+      </div>
+      <div class="feature" style="margin-bottom:0;">
+        <div class="feature-head"><span class="feature-title">Map view</span></div>
+        <p style="font-size:13.5px;color:var(--neutral-600);margin:6px 0 0;">Only the spots added to this trip appear — no other Google POIs — keeping the map uncluttered. Each pin uses the Mateo category marker chosen when the spot was added (see §07). Tapping a pin surfaces the spot.</p>
+      </div>
+    </div>
+
+    <h3 class="sub" style="margin-top:28px;">Opening a spot</h3>
+    <ul>
+      <li>Clicking a spot in either view opens its detail.</li>
+      <li><strong>Custom note</strong> — anyone can add or edit a note on the spot. Notes are shared with every member and show <strong>who wrote them</strong> (author attributed; no timestamp surfaced).</li>
+      <li><strong>Mark done</strong> — a check-mark button toggles the spot's done state.</li>
+    </ul>
+    <div class="note"><strong>Resolved — done is one shared flag.</strong> "Done" is a single shared state for the whole group, scoped to that specific trip. One member checking it shows the green check for everyone on that trip. The same place added to a different trip carries its own independent done state.</div>
+    <div class="note"><strong>Resolved — notes show their author.</strong> Each note displays who wrote it. The time it was written is not surfaced.</div>
+
+    <h3 class="sub">The done state</h3>
+    <p style="font-size:13.5px;color:var(--neutral-600);">A spot marked done shows a <strong>green check</strong> in both list and map views, using the semantic success token so it never gets confused with a category color.</p>
+    <div class="done-demo">
+      <span class="done-check"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+      <div class="done-text"><b>Time Out Market</b><span>Marked done · visible to everyone on the trip</span></div>
+      <span class="feature-tag tag tag--success" style="margin-left:auto;">Done</span>
+    </div>
+    <p style="font-size:12px;color:var(--neutral-500);margin-top:10px;">On the map, the done check overlays the category pin (e.g. a green check badge on the red restaurant marker) so category and status both stay readable.</p>
+  </section>
+
+  <!-- 07 MAP MARKERS -->
+  <section class="section">
+    <div class="section-label"><span class="section-num">07</span> — Visual system</div>
+    <h2 class="section-title">CATEGORIES &amp; MAP MARKERS</h2>
+    <p class="section-desc">Spots map to the Mateo marker palette — a dedicated 10-color, map-only set built to stay distinguishable when pins cluster. The three the brief names (restaurant, hotel→stay, activity) live inside this larger set. Icons render white inside a colored pin at 16px.</p>
+    <table>
+      <thead><tr><th>Category</th><th>Marker color</th><th>Hex</th></tr></thead>
+      <tbody>
+        <tr><td>Stay (hotels)</td><td><span class="dot" style="background:var(--marker-stay);"></span>Midnight</td><td><code>#1C5068</code></td></tr>
+        <tr><td>Restaurant</td><td><span class="dot" style="background:var(--marker-restaurant);"></span>Cayenne</td><td><code>#D94444</code></td></tr>
+        <tr><td>Activity</td><td><span class="dot" style="background:var(--marker-activity);"></span>Coral</td><td><code>#E06830</code></td></tr>
+        <tr><td>Cafe</td><td><span class="dot" style="background:var(--marker-cafe);"></span>Espresso</td><td><code>#8D6E4C</code></td></tr>
+        <tr><td>Bar</td><td><span class="dot" style="background:var(--marker-bar);"></span>Berry</td><td><code>#A83E6C</code></td></tr>
+        <tr><td>Viewpoint</td><td><span class="dot" style="background:var(--marker-viewpoint);"></span>Lagoon blue</td><td><code>#2A7FA5</code></td></tr>
+        <tr><td>Beach</td><td><span class="dot" style="background:var(--marker-beach);"></span>Golden sand</td><td><code>#D4961F</code></td></tr>
+        <tr><td>Hike</td><td><span class="dot" style="background:var(--marker-hike);"></span>Forest</td><td><code>#3A7A54</code></td></tr>
+        <tr><td>Museum</td><td><span class="dot" style="background:var(--marker-museum);"></span>Amethyst</td><td><code>#7E57C2</code></td></tr>
+        <tr><td>Cultural site</td><td><span class="dot" style="background:var(--marker-cultural);"></span>Terracotta</td><td><code>#C2694B</code></td></tr>
+      </tbody>
+    </table>
+    <div class="note">Marker colors are map-only. Everywhere else, use the core Lagoon / Palm / Driftwood / Neutral tokens. On satellite or dark tiles, add a 2px white pin outline to keep markers legible.</div>
+    <div class="note"><strong>Resolved — the user picks the category.</strong> Rather than auto-mapping Google place types to these ten, the add-to-trip flow asks the user to choose the Mateo category. This drives a clear split between the two maps:
+      <ul style="margin:10px 0 0;">
+        <li><strong>Plan tab map</strong> — a 1:1 representation of Google Maps with standard Google markers; shows everything in view for research.</li>
+        <li><strong>Trip tab map</strong> — shows only the spots added to that trip, each drawn with the Mateo category marker selected at add time. Un-added Google locations do not appear, reducing clutter.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 08 FLOWS -->
+  <section class="section section--cool">
+    <div class="section-label"><span class="section-num">08</span> — Experience</div>
+    <h2 class="section-title">KEY FLOWS</h2>
+    <div class="grid-2">
+      <div>
+        <h3 class="sub">Research → save</h3>
+        <ol class="flow">
+          <li>Open <strong>Plan</strong>, search for a place.</li>
+          <li>Open the result's modal, review the Maps data.</li>
+          <li>Tap <strong>Add to trip</strong>; pick or create a trip.</li>
+          <li>The spot appears in that trip for all members.</li>
+        </ol>
+      </div>
+      <div>
+        <h3 class="sub">Create → invite → collaborate</h3>
+        <ol class="flow">
+          <li>Open <strong>Trip</strong>, create and name a trip.</li>
+          <li>Invite companions by text or email.</li>
+          <li>They join via the link and become members.</li>
+          <li>Anyone adds spots, writes notes, marks places done.</li>
+          <li>Everyone sees the same map and list, green checks included.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 09 DATA MODEL -->
+  <section class="section">
+    <div class="section-label"><span class="section-num">09</span> — Architecture</div>
+    <h2 class="section-title">DATA MODEL (SKETCH)</h2>
+    <table>
+      <thead><tr><th>Entity</th><th>Key fields</th></tr></thead>
+      <tbody>
+        <tr><td><strong>User</strong></td><td>id · name · email / phone</td></tr>
+        <tr><td><strong>Trip</strong></td><td>id · name · created_by · created_at</td></tr>
+        <tr><td><strong>TripMember</strong></td><td>trip_id · user_id · role <em>(leader / member)</em> · joined_at</td></tr>
+        <tr><td><strong>Spot</strong></td><td>id · trip_id · google_place_id · cached_place_data · category <em>(user-selected at add)</em> · added_by · added_at · <strong>done</strong> <em>(shared, scoped to this trip)</em></td></tr>
+        <tr><td><strong>Note</strong></td><td>id · spot_id · trip_id · author_id <em>(displayed)</em> · body · updated_at <em>(stored, not shown)</em></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 10 NON-FUNCTIONAL -->
+  <section class="section section--warm">
+    <div class="section-label"><span class="section-num">10</span> — Quality</div>
+    <h2 class="section-title">NON-FUNCTIONAL REQUIREMENTS</h2>
+    <ul>
+      <li><strong>Google Maps Platform:</strong> Maps JavaScript API for both maps, Places API (New) for search and place details, plus Place Photos. Design for quota — session tokens, field masks, debounced search, lazy map loads. See §11 for the integration approach.</li>
+      <li><strong>Shared sync:</strong> one member's change (new spot, note, done toggle) should reach others promptly. Define the acceptable refresh model and latency.</li>
+      <li><strong>Access control:</strong> only members can view or edit a trip's contents.</li>
+      <li><strong>Responsive:</strong> usable from phone to desktop; 44px minimum touch targets.</li>
+      <li><strong>Accessible:</strong> WCAG-grade contrast, visible keyboard focus, reduced-motion respected, screen-reader labels on icon-only controls like the done button.</li>
+      <li><strong>Voice:</strong> sentence case everywhere; specific action labels; errors that explain and recover — <em>"Couldn't load trips. Check your connection and try again."</em></li>
+    </ul>
+  </section>
+
+  <!-- 11 MAPS INTEGRATION -->
+  <section class="section section--cool">
+    <div class="section-label"><span class="section-num">11</span> — Integration</div>
+    <h2 class="section-title">HOW GOOGLE MAPS IS INTEGRATED</h2>
+    <p class="section-desc">Recommendation: build on the <strong>Maps JavaScript API + Places API (New)</strong> — a programmatic integration — rather than an embedded Google Maps iframe. The embed can't carry this product; the requirements force the API path.</p>
+
+    <h3 class="sub">Why not the embedded map</h3>
+    <p>The Maps Embed API is a read-only iframe. It can't draw custom markers, can't capture which place a user selected, and can't overlay state like the done check. That breaks two core requirements at once: the Plan tab needs to know which place was chosen so it can populate the modal and add it to a trip, and the entire Trip map depends on custom category markers, a curated subset of pins, and tap-to-open-spot behavior. None of that is possible in an iframe.</p>
+
+    <h3 class="sub">What the API path gives us</h3>
+    <div class="grid-2">
+      <div class="principle" style="border-color:var(--lagoon-600);">
+        <div class="principle-title">PLAN TAB</div>
+        <p>Use the Places <strong>Place Autocomplete</strong> widget (the new <code>PlaceAutocompleteElement</code>) for the search box — it's Google's own type-ahead, with built-in localization, accessibility, and place-type filters, so the experience mirrors Google Maps search. The map renders standard Google markers. On selection, the <code>gmp-select</code> event returns the place; <code>fetchFields()</code> / Place Details (New) populates the modal.</p>
+      </div>
+      <div class="principle" style="border-color:var(--palm-600);">
+        <div class="principle-title">TRIP TAB</div>
+        <p>The same Maps JS map instance, but rendering only the trip's saved spots as custom advanced markers — colored by the chosen Mateo category, with a green done badge overlaid. Click a marker to open the spot. This is exactly what an iframe can't do.</p>
+      </div>
+    </div>
+
+    <table style="margin-top:20px;">
+      <thead><tr><th>Capability the app needs</th><th>Embed (iframe)</th><th>Maps JS + Places API</th></tr></thead>
+      <tbody>
+        <tr><td>Native-feeling Google search &amp; filters (Plan)</td><td>Partial</td><td>Yes — Autocomplete widget</td></tr>
+        <tr><td>Capture the selected place to add to a trip</td><td>No</td><td>Yes</td></tr>
+        <tr><td>Custom category markers (Trip)</td><td>No</td><td>Yes</td></tr>
+        <tr><td>Show only added spots / hide other POIs (Trip)</td><td>No</td><td>Yes</td></tr>
+        <tr><td>Green done badge on a pin</td><td>No</td><td>Yes</td></tr>
+        <tr><td>Place details for the modal</td><td>No</td><td>Yes — Place Details (New)</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note"><strong>Cost &amp; quota.</strong> Use session tokens so an autocomplete session plus its Place Details call bill as one unit, and field masks so we only pay for the fields the modal shows. Debounce the search box and lazy-load each map.</div>
+    <div class="warn"><strong>Caching &amp; terms — verify before relying on it.</strong> Google's terms let us store a <code>place_id</code> long-term, but restrict caching most other place fields (they generally need periodic refresh). Treat any cached place data as a short-lived display cache, not a source of truth, and confirm the current Google Maps Platform terms during build. Note also the separate EEA terms that apply to EEA-based billing accounts.</div>
+  </section>
+
+  <!-- 12 OPEN QUESTIONS + LATER -->
+  <section class="section">
+    <div class="section-label"><span class="section-num">12</span> — Decisions &amp; horizon</div>
+    <h2 class="section-title">OPEN QUESTIONS &amp; LATER</h2>
+    <h3 class="sub">Resolved</h3>
+    <ul>
+      <li><strong>Done state</strong> — single shared flag for the whole group, scoped to one trip.</li>
+      <li><strong>Invite → account</strong> — account required; invite opens the web app and prompts log-in (sign in or sign up), then joins. Any member or the leader can invite.</li>
+      <li><strong>Permissions</strong> — leader-only: delete spot, remove member, delete trip, transfer leadership. Any member can leave. (See §05.)</li>
+      <li><strong>Notes</strong> — show the author; don't surface the time.</li>
+      <li><strong>Duplicates</strong> — block the same place twice in a trip; notify the user what happened and why.</li>
+      <li><strong>Category</strong> — required at add time; drives the Trip-map marker.</li>
+      <li><strong>Plan search &amp; map</strong> — mirror Google Maps' own search, filters, and map behavior. Maps integration approach in §11.</li>
+      <li><strong>Leader leaves without handing off</strong> — leadership auto-passes down the join order (second member, then third, …) to the first current member; trip is deleted if none remain. (See §05.)</li>
+    </ul>
+    <h3 class="sub">Newly surfaced — worth a quick decision</h3>
+    <ul>
+      <li><strong>Orphaned content</strong> — when a member leaves (or is removed), do the spots and notes they added stay on the trip or go with them?</li>
+      <li><strong>Changing a category later</strong> — can a spot's category be edited after it's added, and who can do it?</li>
+    </ul>
+    <h3 class="sub">Out of scope / later</h3>
+    <ul>
+      <li>Itinerary scheduling (assigning spots to days and times).</li>
+      <li>In-app booking or reservation handoff.</li>
+      <li>Comment threads beyond a single shared note.</li>
+      <li>Suggested or AI-recommended spots.</li>
+    </ul>
+  </section>
+
+  <footer class="foot">
+    <div class="foot-word">MATEO</div>
+    <p>Trip Planner PRD · Draft v0.1 · June 2026 · styled to the Mateo Design System v1.0</p>
+  </footer>
+
+</div>
+</body>
+</html>
